@@ -25,13 +25,6 @@ let autores: { id: number; nome: string; email: string }[] = [
 
 @Injectable()
 export class AutoresService {
-  listarAutores() {
-    if (!autores) {
-      return 'Não há autores cadastrados';
-    }
-    return autores;
-  }
-
   listarAutor(id: number) {
     const autorEncontrado = autores.find((autor) => autor.id === id);
 
@@ -71,5 +64,13 @@ export class AutoresService {
     }
 
     return autorEncontrado;
+  }
+
+  deletarAutor(idAutor: number) {
+    this.listarAutor(idAutor);
+
+    autores = autores.filter((autor) => autor.id !== idAutor);
+
+    return autores;
   }
 }
