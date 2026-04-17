@@ -15,6 +15,11 @@ import { AtualizarAutorDto, CriarAutorDto } from './autores.dto';
 export class AutoresController {
   constructor(private readonly autoresService: AutoresService) {}
 
+  @Get('/listar-autores')
+  async listarAutores() {
+    return await this.autoresService.listarAutores();
+  }
+
   @Get('/listar-autor/:id')
   listarAutor(@Param('id', ParseIntPipe) id: number) {
     return this.autoresService.listarAutor(id);
