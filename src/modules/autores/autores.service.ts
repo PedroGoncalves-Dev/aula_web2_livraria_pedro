@@ -32,45 +32,24 @@ export class AutoresService {
     return await this.autoresRepository.listarAutores();
   }
 
-  listarAutor(id: number) {
-    const autorEncontrado = autores.find((autor) => autor.id === id);
+  async listarAutor(id: number) {
+    const autorEncontrado = await this.autoresRepository.listarAutor(id);
 
     if (!autorEncontrado) {
-      throw new NotFoundException('Autor não encontrado');
+      throw new NotFoundException(`Autor com id ${id} não encontrado`);
     }
 
     return autorEncontrado;
   }
 
   criarAutor(bodyRequest: CriarAutorDto) {
-    if (!bodyRequest.nome || !bodyRequest.email) {
-      return 'Nome e email são obrigatórios';
-    }
-    autores.push({
-      id: autores.length + 1,
-      nome: bodyRequest.nome,
-      email: bodyRequest.email,
-    });
-
-    return autores;
+    return this.autoresRepository.criarAutor(bodyRequest);
   }
 
-  atualizarAutor(idAutor: number, bodyRequest: AtualizarAutorDto) {
-    const autorEncontrado = this.listarAutor(idAutor);
+  async atualizarAutor(idAutor: number, bodyRequest: AtualizarAutorDto) {
+    await this.listarAutor(idAutor);
 
-    if (!bodyRequest.nome && !bodyRequest.email) {
-      throw new BadRequestException('Nome e email são obrigatórios');
-    }
-
-    if (bodyRequest.nome) {
-      autorEncontrado.nome = bodyRequest.nome;
-    }
-
-    if (bodyRequest.email) {
-      autorEncontrado.email = bodyRequest.email;
-    }
-
-    return autorEncontrado;
+    return this.autoresRepository.atualizarAutor(idAutor, bodyRequest);
   }
 
   deletarAutor(idAutor: number) {
